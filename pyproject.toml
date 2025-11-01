@@ -1,0 +1,22 @@
+[project]
+name = "projeto-tea-databricks"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Jennifer Maia",email = "jennifer.maia@wap.ind.br"}
+]
+readme = "README.md"
+requires-python = "^3.11"
+dependencies = [
+    "streamlit (>=1.51.0,<2.0.0)",
+    "databricks-sql-connector (>=4.1.4,<5.0.0)",
+    "plotly (>=6.3.1,<7.0.0)",
+    "python-dotenv (>=1.2.1,<2.0.0)",
+    "google-genai (>=1.47.0,<2.0.0)",
+    "pandas (==2.2.3)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
