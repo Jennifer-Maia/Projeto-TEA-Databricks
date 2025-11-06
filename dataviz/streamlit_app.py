@@ -4,7 +4,6 @@ from databricks import sql
 import os
 from dotenv import load_dotenv
 import plotly.express as px
-import plotly.graph_objects as go
 
 #######################################################################
 
@@ -15,7 +14,7 @@ load_dotenv()
 DATABRICKS_HOST = os.getenv("DATABRICKS_HOST")
 DATABRICKS_HTTP_PATH = os.getenv("DATABRICKS_HTTP_PATH")
 DATABRICKS_TOKEN = os.getenv("DATABRICKS_TOKEN")
-CATALOG_SCHEMA_TABLE = "lakehouse_tea.gold.kpis_proporcao_formal_gold"
+CATALOG_SCHEMA_TABLE = "lakehouse_tea.gold.kpis_proporcao_formal_tea"
 
 
 #######################################################################
@@ -26,7 +25,7 @@ def load_data():
     """Conecta-se ao Databricks SQL Warehouse e carrega a tabela GOLD."""
     if not all([DATABRICKS_HOST, DATABRICKS_HTTP_PATH, DATABRICKS_TOKEN]):
         st.error("Erro de Configuração: Por favor, preencha o arquivo .env com as credenciais do Databricks.")
-        return pd.DataFrame(), 0
+        return pd.DataFrame(), pd.DataFrame(), 0
 
     try:
         with sql.connect(
@@ -54,11 +53,21 @@ def load_data():
             """
             
             with connection.cursor() as cursor:
+                # --- CORREÇÃO 1: Consulta de Agregação (UF) ---
                 cursor.execute(query)
-                df_uf = cursor.fetchall_pandas()
-
+                # Obter os nomes das colunas
+                col_names_uf = [desc[0] for desc in cursor.description]
+                # Obter os dados e criar o DataFrame
+                data_uf = cursor.fetchall()
+                df_uf = pd.DataFrame(data_uf, columns=col_names_uf)
+                
+                # --- CORREÇÃO 2: Consulta de Detalhes ---
                 cursor.execute(detail_query)
-                df_detalhe = cursor.fetchall_pandas()
+                # Obter os nomes das colunas
+                col_names_detalhe = [desc[0] for desc in cursor.description]
+                # Obter os dados e criar o DataFrame
+                data_detalhe = cursor.fetchall()
+                df_detalhe = pd.DataFrame(data_detalhe, columns=col_names_detalhe)
 
             # Cálculo da Proporção Geral
             total_vinculos = df_uf['total_geral'].sum()
@@ -77,7 +86,7 @@ def load_data():
 # --- 3. INTERFACE DO STREAMLIT ---
 st.set_page_config(layout="wide", page_title="Inclusão Formal (TEA/PCD Intelectual)")
 
-df_uf, df_detalhe = load_data()
+df_uf, df_detalhe, proporcao_geral = load_data()
 
 st.title("🧩 Inclusão Formal de PCD Intelectual/TEA no Brasil (RAIS 2024)")
 st.caption("Base: RAIS 2024 (Estimativa) - Filtrado para Deficiência Intelectual/Mental (Cód. 4).")
@@ -93,7 +102,7 @@ if not df_uf.empty:
     # KPI 1: Proporção Nacional
     col1.metric(
         label="Proporção Nacional de Vínculos TEA/PCD",
-        value=f"{proporcao_geral_nacional * 100:.4f}%",
+        value=f"{proporcao_geral * 100:.4f}%",
         delta="O desafio da Inclusão Formal no Brasil",
         delta_color="off"
     )
@@ -152,22 +161,35 @@ if not df_uf.empty:
     col_detalhe, col_bar = st.columns([5, 5])
     
     # Tabela de Detalhes
+    #########
     with col_detalhe:
-        st.subheader("Ocupações Mais Comuns (Insight Burocrático)")
-        st.dataframe(df_detalhe.style.format({'total_vinculos_pcd_tea': "{:,.0f}"}), hide_index=True, use_container_width=True)
+        st.subheader("Ocupações Mais Comuns (Top 10)")
+    # Gráfico de Barras Horizontal
+    fig_bar_rank = px.bar(
+        df_detalhe.head(10).sort_values('total_vinculos_pcd_tea', ascending=True),
+        x='total_vinculos_pcd_tea',
+        y='ocupacao_descricao',
+        orientation='h',
+        title='Ranking de Vínculos por Ocupação'
+    )
+    st.plotly_chart(fig_bar_rank, use_container_width=True)
+    #########
+    # with col_detalhe:
+    #     st.subheader("Ocupações Mais Comuns (Insight Burocrático)")
+    #     st.dataframe(df_detalhe.style.format({'total_vinculos_pcd_tea': "{:,.0f}"}), hide_index=True, use_container_width=True)
     
-    # Gráfico de Barras por Escolaridade (Exemplo simples)
-    if not df_detalhe.empty:
-        df_escolaridade = df_detalhe.groupby('instrucao_descricao')['total_vinculos_pcd_tea'].sum().reset_index()
-        with col_bar:
-            st.subheader("Distribuição por Escolaridade")
-            fig_bar = px.pie(
-                df_escolaridade, 
-                values='total_vinculos_pcd_tea', 
-                names='instrucao_descricao', 
-                title='Vínculos TEA/PCD por Grau de Instrução'
-            )
-            st.plotly_chart(fig_bar, use_container_width=True)
+    # # Gráfico de Barras por Escolaridade (Exemplo simples)
+    # if not df_detalhe.empty:
+    #     df_escolaridade = df_detalhe.groupby('instrucao_descricao')['total_vinculos_pcd_tea'].sum().reset_index()
+    #     with col_bar:
+    #         st.subheader("Distribuição por Escolaridade")
+    #         fig_bar = px.pie(
+    #             df_escolaridade, 
+    #             values='total_vinculos_pcd_tea', 
+    #             names='instrucao_descricao', 
+    #             title='Vínculos TEA/PCD por Grau de Instrução'
+    #         )
+    #         st.plotly_chart(fig_bar, use_container_width=True)
             
 else:
     st.info("Aguardando o carregamento dos dados da sua camada GOLD...")
