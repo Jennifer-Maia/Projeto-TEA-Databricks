@@ -5,6 +5,17 @@ import os
 from dotenv import load_dotenv
 import plotly.express as px
 
+st.sidebar.markdown("""
+# Contato & Repositório
+## Jennifer Maia
+
+[![GitHub Badge](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)]([https://github.com/Jennifer-Maia/Projeto-TEA-Databricks])
+[![LinkedIn Badge](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white)]([https://www.linkedin.com/in/jennifer-n-maia])
+
+---
+**Status do Projeto:** ETL e Dashboard concluídos.
+""")
+
 #######################################################################
 
 # Carrega as variáveis de ambiente do arquivo .env
