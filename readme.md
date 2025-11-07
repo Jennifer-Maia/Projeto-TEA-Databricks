@@ -1,6 +1,8 @@
 # 🧩 Projeto TEA Data Lakehouse: Análise de Inclusão Formal (RAIS 2024)
 
-![Visualização do Dashboard]([scr/streamlit_img.png])
+<p align="center">
+  <img src="scr/streamlit_img.png" alt="Visualização do Dashboard" width="800"/>
+</p>
 
 Este projeto implementa uma arquitetura completa de Data Lakehouse no Databricks, culminando em um dashboard analítico (Streamlit) focado na análise da inclusão de pessoas com Transtorno do Espectro Autista (TEA) e Deficiência Intelectual no mercado de trabalho formal brasileiro.
 
@@ -23,7 +25,7 @@ Os resultados extraídos da camada GOLD transformam uma questão social complexa
 ---
 
 ## 🛠️ Stack Tecnológico e Arquitetura
-![Visualização do Planejamento]([scr/excalidraw.png])
+
 <p align="center">
   <img src="scr/excalidraw.png" alt="Visualização do Planejamento" width="800"/>
 </p>
