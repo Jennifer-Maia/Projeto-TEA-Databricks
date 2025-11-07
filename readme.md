@@ -24,6 +24,9 @@ Os resultados extraídos da camada GOLD transformam uma questão social complexa
 
 ## 🛠️ Stack Tecnológico e Arquitetura
 ![Visualização do Planejamento]([scr/excalidraw.png])
+<p align="center">
+  <img src="scr/excalidraw.png" alt="Visualização do Planejamento" width="800"/>
+</p>
 Este projeto demonstra proficiência na construção de um pipeline de dados ponta a ponta, usando as seguintes ferramentas:
 
 ### Arquitetura (Lakehouse Pattern)
