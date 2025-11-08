@@ -1,73 +1,137 @@
-# 🧩 Projeto TEA Data Lakehouse: Análise de Inclusão Formal (RAIS 2024)
+
+# 💜 TEA Data Lakehouse — Análise de Inclusão no Mercado Formal (RAIS 2024)
 
 <p align="center">
   <img src="scr/streamlit_img.png" alt="Visualização do Dashboard" width="800"/>
 </p>
 
-Este projeto implementa uma arquitetura completa de Data Lakehouse no Databricks, culminando em um dashboard analítico (Streamlit) focado na análise da inclusão de pessoas com Transtorno do Espectro Autista (TEA) e Deficiência Intelectual no mercado de trabalho formal brasileiro.
+Este projeto implementa uma arquitetura completa de **Data Lakehouse** no **Databricks**, culminando em um **dashboard analítico (Streamlit)** voltado à análise da **inclusão de pessoas com Transtorno do Espectro Autista (TEA)** e **Deficiência Intelectual** no mercado de trabalho formal brasileiro.
 
 ---
 
-## 💜 Propósito e Impacto Social
+## 💡 Propósito e Impacto Social
 
-O projeto é guiado pela minha experiência pessoal como pessoa autista e pela percepção dos desafios estruturais que a neurodivergência enfrenta no mercado.
+O projeto nasce da minha vivência como pessoa autista e da percepção dos desafios estruturais que a neurodivergência enfrenta no mercado de trabalho.
 
-Muitas habilidades inerentes ao TEA (como foco em detalhes, consistência e lógica) são valiosas, mas a rigidez do mercado neurotípico pode mascarar este potencial. **O objetivo é fornecer dados claros** para mover a discussão de "somos capazes" para "como criar um ambiente de trabalho mais inclusivo, adaptável e acolhedor".
+Muitas das habilidades associadas ao TEA — como foco, consistência e raciocínio lógico — são valiosas, mas frequentemente invisibilizadas por ambientes desenhados para perfis neurotípicos.
+A proposta aqui é **usar dados para transformar essa realidade**, gerando visibilidade e impulsionando políticas de inclusão baseadas em evidências.
 
-### Valor Gerado pela Análise de Dados:
+### 📊 Valor Gerado pela Análise
 
-Os resultados extraídos da camada GOLD transformam uma questão social complexa em métricas acionáveis:
+Os resultados extraídos da camada GOLD traduzem uma questão social em métricas acionáveis:
 
-* **Visibilidade do Desafio:** Os indicadores chave (como a **Proporção Nacional de Vínculos TEA/PCD** de **0.9071%**) estabelecem um ponto de partida claro para qualquer iniciativa de inclusão.
-* **Identificação de Tendências:** A análise geográfica e a distribuição salarial (Média Salarial de **R$ 1.960,79**) e por ocupação mostram onde o esforço de inclusão está concentrado e quais áreas demandam maior investimento.
-* **Dados para Decisão:** O projeto fornece a base de dados limpa e agregada, essencial para que profissionais tomem decisões informadas sobre políticas de diversidade e investimento em qualificação.
+* **Visibilidade do Desafio:** indicadores como a **Proporção Nacional de Vínculos TEA/PCD (0,9071%)** estabelecem uma linha de base para ações de inclusão.
+* **Identificação de Tendências:** a distribuição por UF, escolaridade e ocupação mostra onde há mais concentração de vínculos e onde há lacunas.
+* **Suporte à Decisão:** os dados consolidados permitem análises estratégicas para políticas públicas e programas de diversidade.
+
+> ⚠️ **Importante:** os números apresentados derivam de uma **amostra reduzida dos microdados RAIS** (extraída via BigQuery).
+> Portanto, os resultados representam **tendências indicativas**, não valores oficiais. O objetivo é demonstrar o pipeline e as análises possíveis a partir de um recorte realista.
 
 ---
 
-## 🛠️ Stack Tecnológico e Arquitetura
+## 🏗️ Stack Tecnológico e Arquitetura
 
 <p align="center">
   <img src="scr/excalidraw.png" alt="Visualização do Planejamento" width="800"/>
 </p>
-Este projeto demonstra proficiência na construção de um pipeline de dados ponta a ponta, usando as seguintes ferramentas:
 
 ### Arquitetura (Lakehouse Pattern)
 
-O pipeline segue a **Medallion Architecture** (Bronze, Silver, Gold), garantindo qualidade, linhagem e reusabilidade dos dados.
+O pipeline segue o padrão **Medallion Architecture** (Bronze → Silver → Gold), garantindo qualidade, rastreabilidade e reuso dos dados.
 
-| Camada | Descrição | Ferramentas |
-| :--- | :--- | :--- |
-| **ETL Pipeline** | Construção das transformações e regras de qualidade. | **Delta Live Tables (DLT)** (em substituição ao dbt original) |
-| **Data Lakehouse** | Armazenamento e gerenciamento dos dados no formato aberto Delta Lake. | **Databricks** |
-| **Visualização** | Consumo e apresentação dos KPIs e gráficos. | **Streamlit** |
-| **Versionamento** | Gerenciamento de código e fluxo de trabalho. | **Git / GitHub** |
-| **Ambiente Local** | Gerenciamento robusto de dependências Python. | **Poetry** |
+| Camada             | Descrição                                          | Ferramentas                   |
+| :----------------- | :------------------------------------------------- | :---------------------------- |
+| **ETL Pipeline**   | Transformações e regras de qualidade declarativas. | **Delta Live Tables (DLT)**   |
+| **Data Lakehouse** | Armazenamento e gerenciamento em formato Delta.    | **Databricks**                |
+| **Visualização**   | Painel interativo e storytelling de dados.         | **Streamlit + Plotly**        |
+| **Versionamento**  | Controle de versão e deploy.                       | **Git / GitHub**              |
+| **Ambiente Local** | Gerenciamento de dependências e reprodutibilidade. | **Poetry / requirements.txt** |
 
-**Por que Databricks e DLT?**
-O uso do Delta Live Tables foi uma decisão estratégica para me especializar no ecossistema Databricks. O DLT oferece uma abordagem declarativa para ETL, simplificando a aplicação de expectativas de qualidade e o gerenciamento do *state* do Delta Lake, algo crucial em ambientes de produção.
+**Por que Databricks + DLT?**
+O **Delta Live Tables** foi escolhido para explorar o ecossistema Databricks em profundidade — oferecendo pipelines declarativos com *data quality expectations* e controle de *state*, fundamentais em soluções escaláveis.
 
-### Fontes de Dados
+---
 
-* **RAIS 2024 (Estimativa):** Principal fonte de dados sobre vínculos formais de trabalho no Brasil.
-* **IBGE (Diversos Datasets):** Utilizado para enriquecimento geográfico e classificações (CBO).
-* **Kaggle e Outras Amostras:** Utilizado para fornecer dados complementares e contexto à análise de inclusão.
+## 🧩 Fontes de Dados
+
+* **RAIS 2024 (Estimativa)** — Principal fonte de vínculos formais no Brasil.
+* **IBGE / CBO (via BigQuery)** — Enriquecimento com ocupações e classificações geográficas.
+* **Dicionários auxiliares (RAIS e CBO)** — Normalização de descrições e categorias.
 
 ---
 
 ## 🚧 Desafios e Lições Aprendidas
 
-A execução do projeto apresentou desafios técnicos importantes que foram superados:
+1. **Mesclagem de Fontes:** garantir a integridade das chaves (RAIS + CBO) e harmonização das descrições.
+2. **Gerenciamento de Dependências:** uso do **Poetry** para estabilizar conflitos entre `databricks-sql-connector` e `pandas`.
+3. **Conector Databricks → Streamlit:** adaptação do código para `cursor.fetchall()` + `pd.DataFrame()`, substituindo métodos não suportados.
+4. **Escalabilidade:** o uso de DLT simplificou o monitoramento de *data lineage* e automação da carga incremental.
 
-1.  **Aquisição e Mesclagem de Dados:** A complexidade de mesclar fontes distintas (RAIS, IBGE) para criar um *dataset* coerente sobre TEA/PCD, garantindo a integridade dos IDs e classificações.
-2.  **Gerenciamento de Dependências:** O **Poetry** foi essencial para resolver o conflito entre o `databricks-sql-connector` e os rígidos requisitos de versão do `pandas` de forma estável e reproduzível.
-3.  **Adaptação de API do Conector:** O erro `fetchall_pandas` (atributo não existente) exigiu uma refatoração na camada de conexão do Streamlit, mostrando a necessidade de adaptar o código ao comportamento específico do driver SQL do Databricks (`cursor.fetchall()` + `pd.DataFrame()`).
+---
+
+## ⚙️ Como Reproduzir
+
+### 1. Clone o repositório
+
+```bash
+git clone https://github.com/Jennifer-Maia/Projeto-TEA-Databricks.git
+cd Projeto-TEA-Databricks
+```
+
+### 2. Crie o ambiente
+
+```bash
+poetry install
+# ou
+pip install -r requirements.txt
+```
+
+### 3. Configure variáveis de conexão
+
+Crie um arquivo `.env` (ou use variáveis de ambiente) com:
+
+```
+DATABRICKS_SERVER_HOST=https://<workspace-url>
+DATABRICKS_HTTP_PATH=/sql/warehouses/<id>
+DATABRICKS_TOKEN=<seu-token>
+```
+
+### 4. Execute o Streamlit
+
+```bash
+streamlit run app.py
+```
+
+### 5. (Opcional) Rode no Databricks
+
+Execute os notebooks de **ingestão** e **transformação** para gerar as tabelas Bronze → Gold no seu workspace.
+
+---
+
+## 📈 Resultados (Versão de Demonstração)
+
+| Indicador                       | Valor (amostra) |
+| :------------------------------ | --------------: |
+| **Proporção Nacional TEA/PCD**  |         0,9071% |
+| **Total de Vínculos (amostra)** |           1.413 |
+| **Média Salarial (amostra)**    |     R$ 1.960,79 |
+
+> *Os valores acima são ilustrativos, baseados no subconjunto usado para desenvolvimento e demonstração do pipeline.*
 
 ---
 
 ## 🚀 Próximos Passos
 
-O roadmap para o projeto inclui as seguintes expansões, transformando-o em uma plataforma de análise preditiva:
+* Adicionar métricas de **turnover** e **tempo médio de permanência**.
+* Criar modelo de **Machine Learning** preditivo de inclusão/retenção.
+* Implementar um **Agente Analítico LLM** para consultas em linguagem natural.
 
-* **Expansão de KPIs na GOLD:** Adicionar métricas como *turnover* e *tempo médio de permanência* para avaliar a retenção.
-* **Modelo de Machine Learning:** Desenvolver um modelo para prever a probabilidade de sucesso/permanência de um profissional TEA em diferentes setores, com base em *features* como escolaridade e ocupação.
-* **Agente de I.A. Analítico:** Implementar um Agente LLM para permitir que o usuário faça perguntas complexas em linguagem natural, obtendo *insights* diretos dos DataFrames (Visualização Aumentada).
+---
+
+## 👩‍💻 Autor
+
+**Jennifer Maia** — *Analytics Engineer*
+Apaixonada por dados, inclusão e arquitetura de soluções que conectam tecnologia e propósito.
+[LinkedIn](https://www.linkedin.com/in/jennifer-n-maia/) • [GitHub](https://github.com/Jennifer-Maia)
+
+---
